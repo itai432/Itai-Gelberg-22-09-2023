@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
-import { useDispatch } from 'react-redux';
-import { addFavorite } from '../slices/favoritesSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite } from "../slices/favoritesSlice";
+import { FavoritesState } from "../slices/favoritesSlice";
+
 import {
   Card,
   CardContent,
@@ -21,8 +23,10 @@ const CurrentWeather: React.FC = () => {
   const [weather, setWeather] = useState<any>(null);
   const [error, setError] = useState<string>("");
   const [options, setOptions] = useState<string[]>([]);
-  const dispatch = useDispatch(); 
-
+  const dispatch = useDispatch();
+  const favorites = useSelector(
+    (state: { favorites: FavoritesState }) => state.favorites.favorites
+  );
 
   const getWeather = async () => {
     try {
@@ -102,12 +106,19 @@ const CurrentWeather: React.FC = () => {
 
   const handleAddToFavorites = useCallback(() => {
     if (weather && city) {
-      dispatch(addFavorite({ city, weather })); 
-    }
-  }, [city, weather, dispatch]);
+      const isCityInFavorites = favorites.some(
+        (favorite) => favorite.city === city
+      );
 
+      if (isCityInFavorites) {
+        console.warn(`${city} is already in the favorites`);
+      } else {
+        dispatch(addFavorite({ city, weather }));
+      }
+    }
+  }, [city, weather, dispatch, favorites]);
   return (
-    <Grid container justifyContent="center">
+    <Grid width={"50vw"} container justifyContent="center">
       <Grid item xs={12} sm={10} md={8} lg={6}>
         <Box textAlign="center" mt={2}>
           <Autocomplete
@@ -135,21 +146,48 @@ const CurrentWeather: React.FC = () => {
           >
             Search
           </Button>
-          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
           {weather && (
-            <Button variant="contained" color="secondary" onClick={handleAddToFavorites} sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleAddToFavorites}
+              sx={{ mt: 2 }}
+            >
               Add to Favorites
             </Button>
           )}
           {weather && (
-            <Card elevation={3} sx={{ mt: 2 }}>
-              <CardHeader title="Weather Details" />
+            <Card
+              elevation={3}
+              sx={{
+                mt: 2,
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                borderRadius: 2,
+              }}
+            >
+              <CardHeader
+                title="Weather Details"
+                sx={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
+              />
               <Divider />
-              <CardContent>
-                <Typography variant="h6" component="div">
+              <CardContent sx={{ padding: 3 }}>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ marginBottom: 1 }}
+                >
                   {formatDate(weather.LocalObservationDateTime)}
                 </Typography>
-                <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1 }}>
+                <Typography
+                  variant="subtitle1"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
                   {weather.WeatherText}
                 </Typography>
                 <Typography variant="h5" sx={{ mt: 2 }}>
