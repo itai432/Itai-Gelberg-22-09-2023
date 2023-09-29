@@ -32,7 +32,7 @@ const CurrentWeather: React.FC = () => {
     try {
       setError("");
       const baseUrl = "http://dataservice.accuweather.com";
-      const apiKey = "FxGVoGa6VcNFkIPPdDUhbpKQTlJQW99e";
+      const apiKey = "W33MYdXJvdRA78pgMkRgPyx1md4D1sMo";
 
       const searchResponse = await axios.get(
         `${baseUrl}/locations/v1/cities/search?q=${city}&apikey=${apiKey}`
@@ -92,7 +92,7 @@ const CurrentWeather: React.FC = () => {
 
   const handleAutocomplete = async (value: string) => {
     const baseUrl = "http://dataservice.accuweather.com";
-    const apiKey = "FxGVoGa6VcNFkIPPdDUhbpKQTlJQW99e";
+    const apiKey = "W33MYdXJvdRA78pgMkRgPyx1md4D1sMo";
 
     try {
       const response = await axios.get(
@@ -138,56 +138,30 @@ const CurrentWeather: React.FC = () => {
               />
             )}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSearch}
-            sx={{ ml: 1, mt: 2, mb: 2 }}
-          >
-            Search
-          </Button>
-          {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
-            </Alert>
-          )}
-          {weather && (
+          <Box display="flex" justifyContent="center" mt={2} gap={2}>
             <Button
               variant="contained"
-              color="secondary"
-              onClick={handleAddToFavorites}
-              sx={{ mt: 2 }}
+              color="primary"
+              onClick={handleSearch}
             >
-              Add to Favorites
+              Search
             </Button>
-          )}
+            {weather && (
+              <Button variant="contained" color="secondary" onClick={handleAddToFavorites}>
+                Add to Favorites
+              </Button>
+            )}
+          </Box>
+          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
           {weather && (
-            <Card
-              elevation={3}
-              sx={{
-                mt: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-                borderRadius: 2,
-              }}
-            >
-              <CardHeader
-                title="Weather Details"
-                sx={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
-              />
+            <Card elevation={3} sx={{ mt: 2 }}>
+              <CardHeader title="Weather Details" />
               <Divider />
-              <CardContent sx={{ padding: 3 }}>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ marginBottom: 1 }}
-                >
+              <CardContent>
+                <Typography variant="h6" component="div">
                   {formatDate(weather.LocalObservationDateTime)}
                 </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
+                <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1 }}>
                   {weather.WeatherText}
                 </Typography>
                 <Typography variant="h5" sx={{ mt: 2 }}>
