@@ -38,7 +38,6 @@ const CurrentWeather: React.FC = () => {
         `${baseUrl}/locations/v1/cities/search?q=${city}&apikey=${apiKey}`
       );
 
-      console.log(searchResponse.data); // Log the response data
 
       if (
         !Array.isArray(searchResponse.data) ||
