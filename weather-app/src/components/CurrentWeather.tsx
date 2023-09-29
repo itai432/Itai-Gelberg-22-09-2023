@@ -31,7 +31,7 @@ const CurrentWeather: React.FC = () => {
   const getWeather = async () => {
     try {
       setError("");
-      const baseUrl = "http://dataservice.accuweather.com";
+      const baseUrl = "https://dataservice.accuweather.com";
       const apiKey = "W33MYdXJvdRA78pgMkRgPyx1md4D1sMo";
 
       const searchResponse = await axios.get(
@@ -91,7 +91,7 @@ const CurrentWeather: React.FC = () => {
   };
 
   const handleAutocomplete = async (value: string) => {
-    const baseUrl = "http://dataservice.accuweather.com";
+    const baseUrl = "https://dataservice.accuweather.com";
     const apiKey = "W33MYdXJvdRA78pgMkRgPyx1md4D1sMo";
 
     try {
